@@ -1,9 +1,3 @@
-<?php 
-
-
-
-
- ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,18 +7,20 @@
 	<script src="submit.js"></script>
 </head>
 <body>
+<?php 
+require_once('../config.php');
+ ?>
 	<div class="lessons">
 		<div class="menu">
 			<form class="lessons-form" method="post">
 				<ul>
 					<li>
 						<label>Класс</label>
-						<input list="grades" class="search" name="grade" id="grade">
+						<input list="grade_list" class="search" name="grade" id="grade">
 						<!-- How to update this? -->
-						<datalist id="grades">
+						<datalist id="grade_list">
 							<?php 
-								require_once('../config.php');
-								$query = 'SELECT grade from schedule where city="Кемь" and school="МБОУСОШ1" ORDER BY grade asc';
+								$query = 'SELECT distinct grade from schedule where city="Кемь" and school="МБОУСОШ1" ORDER BY grade asc';
 								$result = @mysqli_query($dbc, $query);
 								if($result){
 									while($row = mysqli_fetch_array($result)){
@@ -39,11 +35,10 @@
 					</li>
 					<li>
 						<label>Профиль</label>
-						<input id="profile" list="profile" class="search" value="нет" name="profile">
-						<datalist id='profile'>
-							<option value="нет"></option>
+						<input id="profile" list="profile_list" class="search" value="нет" name="profile">
+						<datalist id='profile_list'>
 							<?php 
-								$query = 'SELECT profile from schedule where city="Кемь" and school="МБОУСОШ1"';
+								$query = 'SELECT distinct profile from schedule where city="Кемь" and school="МБОУСОШ1"';
 								$result = @mysqli_query($dbc, $query);
 								if($result){
 									while($row = mysqli_fetch_array($result)){
