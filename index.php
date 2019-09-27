@@ -22,11 +22,39 @@
 						<input list="grades" class="search" name="grade" id="grade">
 						<!-- How to update this? -->
 						<datalist id="grades">
+							<?php 
+								require_once('../config.php');
+								$query = 'SELECT grade from schedule where city="Кемь" and school="МБОУСОШ1" ORDER BY grade asc';
+								$result = @mysqli_query($dbc, $query);
+								if($result){
+									while($row = mysqli_fetch_array($result)){
+										echo "<option value='$row[0]'></option>";
+									}
+								}else{
+									echo 'Ошибка в получении классов:';
+									echo mysqli_error($dbc);
+								}
+							 ?>
   						</datalist>
 					</li>
 					<li>
 						<label>Профиль</label>
-						<input id="profile" type="text" class="search" value="нет" name="profile">
+						<input id="profile" list="profile" class="search" value="нет" name="profile">
+						<datalist id='profile'>
+							<option value="нет"></option>
+							<?php 
+								$query = 'SELECT profile from schedule where city="Кемь" and school="МБОУСОШ1"';
+								$result = @mysqli_query($dbc, $query);
+								if($result){
+									while($row = mysqli_fetch_array($result)){
+										echo "<option value='$row[0]'></option>";
+									}
+								}else{
+									echo 'Ошибка в получении профилей:';
+									echo mysqli_error($dbc);
+								}
+							 ?>
+						</datalist>
 					</li>
 					<li>
 						<label>День Недели</label>
@@ -53,3 +81,7 @@
 	</div>
 </body>
 </html>
+
+<?php 
+mysqli_close($dbc);
+ ?>
