@@ -12,8 +12,6 @@ function SubmitUpdateLessons(){
 	var profile = $("#profile").val();
 	var day = $("#day").val();
 	var priority = $('#priority').val();
-	
-	// document.write(priority);
 
 	var lessons_string = '';
 	var lesson = '';
@@ -21,11 +19,11 @@ function SubmitUpdateLessons(){
 	for (var i = 0; i < 6; i++) {
 		lesson = $('#lesson-'+i).val().trim();
 		cab = $('#class-'+i).val().trim();
-		lessons_string+=lesson+'-'+cab+';';
+		lessons_string+=lesson+'_'+cab+';';
 	}
 	lesson = $('#lesson-6').val().trim();
 	cab = $('#class-6').val().trim();
-	lessons_string+=lesson+'-'+cab;
+	lessons_string+=lesson+'_'+cab;
 	
 	$.post("submit.php", {type:'updatelessons', profile:profile, day:day, priority:priority, lessons_string:lessons_string, grade:grade}, function(data) {
 			$('.result').html(data);
