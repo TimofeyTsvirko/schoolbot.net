@@ -2,7 +2,7 @@ function SubmitSearchQuery(){
 	var grade = $("#grade").val();
 	var profile = $("#profile").val();
 	var day = $("#day").val();
-	$.post("submit.php", {type:'searchlessons', grade:grade, profile:profile, day:day}, function(data) {
+	$.post("submit.php", {type:'searchlessons', grade:grade, profile:profile, day:day, priority:''}, function(data) {
 			$('.schedule').html(data);
 	})
 }
@@ -27,5 +27,32 @@ function SubmitUpdateLessons(){
 	
 	$.post("submit.php", {type:'updatelessons', profile:profile, day:day, priority:priority, lessons_string:lessons_string, grade:grade}, function(data) {
 			$('.result').html(data);
+	})
+}
+
+
+var k=0;
+function SubmitQueryLessonsMultipleOptions(){
+	if (k % 2 == 1){
+		var grade = $("#grade").val();
+		var profile = $("#profile").val();
+		var day = $("#day").val();
+		var priority = $("#remaining").val();
+		$.post("submit.php", {type:'searchlessons', grade:grade, profile:profile, day:day, priority:priority}, function(data) {
+			$('.schedule').html(data);
+	})
+	}
+	k++;
+
+}
+
+function DeleteSchedule(){
+	var grade = $("#grade").val();
+	var profile = $("#profile").val();
+	var day = $("#day").val();
+	var priority = $('#priority').val();
+
+	$.post("submit.php", {type:'deleteschedule', grade:grade, profile:profile, day:day, priority:priority}, function(data) {
+			$('.schedule').html(data);
 	})
 }
