@@ -79,4 +79,7 @@ require_once('../config.php');
 
 <?php 
 mysqli_close($dbc);
+ 
+
+
  ?>
