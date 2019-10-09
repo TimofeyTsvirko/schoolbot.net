@@ -1,5 +1,5 @@
 <?php  
-require_once('../config.php');
+require_once('config.php');
 if($_POST['type']=='searchlessons'){
 	$data_missing = array();
 
@@ -94,7 +94,7 @@ if($_POST['type']=='searchlessons'){
 			$k = 0;
 			foreach ($lessons_classes as $pair) {
 				$pair = explode('_', $pair);
-				echo "<li><input list='lessons' id='lesson-$k' value=$pair[0]> <input type='text' id='class-$k' value=$pair[1]></li>";
+				echo "<li><input list='lessons' id='lesson-$k' value='$pair[0]'> <input type='text' id='class-$k' value='$pair[1]'></li>";
 				$k++;
 			}
 			echo '<datalist id="lessons">';
@@ -234,7 +234,7 @@ if($_POST['type']=='updatelessons'){
 		$priority = $_POST['priority'];
 		$time_created = time();
 
-		$query = "SELECT * FROM schedule where grade='$grade' and profile='$profile' and day='$day'";
+		$query = "SELECT * FROM schedule where grade='$grade' and profile='$profile' and day='$day' and city='Кемь' and school='МБОУСОШ1'";
 		$result = @mysqli_query($dbc,$query);
 
 		if($result){
