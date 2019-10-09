@@ -5,10 +5,12 @@
 	<link rel="stylesheet" href="style_index.css">
 	<script src="jquery.js"></script>
 	<script src="submit.js"></script>
+	<meta name="viewport" content="widht=device-width,initial-scale=1">
 </head>
 <body>
 <?php 
-require_once('../config.php');
+require_once 'config.php';
+
  ?>
 	<div class="lessons">
 		<div class="menu">
@@ -17,7 +19,6 @@ require_once('../config.php');
 					<li>
 						<label>Класс</label>
 						<input list="grade_list" class="search" name="grade" id="grade">
-						<!-- How to update this? -->
 						<datalist id="grade_list">
 							<?php 
 								$query = 'SELECT distinct grade from schedule where city="Кемь" and school="МБОУСОШ1" ORDER BY grade asc';
@@ -79,7 +80,4 @@ require_once('../config.php');
 
 <?php 
 mysqli_close($dbc);
- 
-
-
  ?>
