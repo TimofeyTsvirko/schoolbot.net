@@ -56,3 +56,10 @@ function DeleteSchedule(){
 			$('.schedule').html(data);
 	})
 }
+
+function SubmitBotText(){
+	var text = $("#text").val();
+	$.post("index.php", {text:text}, function(data) {
+			$('.result').html(data);
+	})
+}
