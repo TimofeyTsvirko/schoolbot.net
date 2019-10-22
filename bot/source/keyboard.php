@@ -38,23 +38,26 @@ function bot_createMenuKeyboard($user_role, $testing){
 	$keyboard = array();
 	$keyboard['one_time'] = true;
 	// buttons object (array of arrays)
-	$buttons = array();
+	$keyboard['buttons'] = array();
 	// first row
-	$buttons[] = array();
+	$keyboard['buttons'][] = array();
 	
 	// schedule button
 	$schedule = array('color' => 'primary', 
-					'action' => array('type' => 'text', 'label' => 'Расписание', 'payload' => '{"button": "schedule"}'));
-	$buttons[0][] = $schedule;
+					'action' => array('type' => 'text', 'label' => 'Расписание'));
+	$keyboard['buttons'][0][] = $schedule;
 
 	switch ($user_role) {
 		case 'user':
-			
+		case 'worker':
+		case 'admin':
+			$news = array('color' => 'primary', 
+					'action' => array('type' => 'text', 'label' => 'Новости'));
+			$keyboard['buttons'][0][] = $news;
 			break;
 		case 'worker':
 			# code...
 			break;
-		case 'worker+':
 		case 'admin':
 			# code...
 			break;
@@ -62,7 +65,7 @@ function bot_createMenuKeyboard($user_role, $testing){
 			bot_handleError($user_id,'program','bot_createMenuKeyboard',$testing);
 			break;
 	}
-	$keyboard['buttons'] = $buttons;
+
 	return json_encode($keyboard, JSON_UNESCAPED_UNICODE
 	);
 }

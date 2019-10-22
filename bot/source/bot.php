@@ -17,6 +17,8 @@ function bot_handleMessage($data,$testing=false){
 		switch ($message) {
 			case 'отменить':
 				bot_removeConversation($user_id,$testing);
+				$keyboard = bot_createKeyboard($user_id, 'menu', $testing);
+				bot_sendMessage($user_id, 'Хорошо, отменено',$testing,$keyboard);
 				break;
 			
 			default:
@@ -40,7 +42,8 @@ function bot_handleMessage($data,$testing=false){
 
 function bot_unknownCommand($user_id,$testing=false){
 	$msg = "Я не понял, что вы имели ввиду :(";
-	bot_sendMessage($user_id,$msg,$testing);
+	$keyboard = bot_createKeyboard($user_id, 'menu', $testing);
+	bot_sendMessage($user_id,$msg,$testing,$keyboard);
 }
 
 function bot_handleHello($data,$testing=false){
@@ -87,7 +90,7 @@ function bot_handleSchedule($data,$testing = false){
 	$result = @mysqli_query($dbc, $query);
 	if($result){
 		if($result->num_rows == 0){
-			
+			// ------HERE------
 		}
 	}
 }
