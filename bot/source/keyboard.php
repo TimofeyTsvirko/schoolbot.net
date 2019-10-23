@@ -23,7 +23,9 @@ function bot_createKeyboard($user_id, $type, $testing){
 			case 'mailing':
 				$keyboard = bot_createAcceptKbd();
 				break;
-			case 'cancel':
+
+			case 'days_of_week_schedule':
+				// ----------here 
 				$keyboard = bot_createCancelKbd();
 				break;
 			default:
@@ -39,7 +41,7 @@ function bot_createKeyboard($user_id, $type, $testing){
 function bot_createKbdSample(){	
 	// keyboard object
 	$keyboard = array();
-	$keyboard['one_time'] = true;
+	$keyboard['one_time'] = false;
 	// buttons object (array of arrays)
 	$keyboard['buttons'] = array();
 	// first row
@@ -88,15 +90,5 @@ function bot_createAcceptKbd(){
 					'action' => array('type'=>'text', 'label'=>'Не согласен(-на)'));
 	$keyboard['buttons'][0][] = $accept;
 	$keyboard['buttons'][0][] = $decline;
-	return json_encode($keyboard, JSON_UNESCAPED_UNICODE);
-}
-
-function bot_createCancelKbd(){
-	$keyboard = bot_createKbdSample();
-
-	$cancel = array('color' => 'negative',
-					'action' => array('type'=>'text', 'label'=>'Отменить'));
-	$keyboard['buttons'][0][] = $cancel;
-
 	return json_encode($keyboard, JSON_UNESCAPED_UNICODE);
 }

@@ -12,6 +12,8 @@ function bot_createConversation($user_id, $type, $testing=false){
 	if(!($result)){
 		bot_handleError($user_id,'mysql','bot_createConversation',$testing);
 		echo mysqli_error($dbc);
+	}else{
+		bot_sendMessage($user_id,'Чтобы прекратить любой процесс, просто напишите "отменить"',$testing,'none');
 	}
 }
 
@@ -105,7 +107,7 @@ function bot_convDataProcess($user_id,$msg,$testing=false){
 			$result = @mysqli_query($dbc,$query);
 			if($result){
 				$msg = 'Как я писал ранее, я могу делать новостные рассылки от школы, чтобы вы были в курсе всех событий, которые будут происходить в ближайшее время.';
-				bot_sendMessage($user_id,$msg,$testing);
+				bot_sendMessage($user_id,$msg,$testing,'none');
 
 				$msg = 'Вы согласны получать рассылку?';
 				$keyboard = bot_createKeyboard($user_id, 'mailing', $testing);
@@ -156,13 +158,45 @@ function bot_convMailing($user_id,$msg,$testing=false){
 	}
 }
 
-function bot_convAddGrade($user_id,$msg,$testing=false){
+function bot_convAddGrade($user_id,$grade,$testing=false){
 	global $dbc;
 	$query = "SELECT * FROM users where id=$user_id";
-	$result = @mysqli_query($dbc,$query);
-	if($result){
-		// ---------here----------
+	$result_users = @mysqli_query($dbc,$query);
+	if($result_users){
+		if($result_users->num_rows != 0){
+			$query = "SELECT grade from schedule where grade='$grade'";
+			$result_schedule = @mysqli_query($dbc, $query);
+			if($result_schedule){
+				if($result_schedule->num_rows != 0){
+					$user_row = mysqli_fetch_assoc($result_users);
+					$name = $user_row['name'];
+					if(is_null($name)){
+						$query = "UPDATE users set grade='$grade' where id=$user_id";
+						$result = @mysqli_query($dbc,$query);
+						if($result){
+							bot_removeConversation($user_id,$testing);
+							// $keyboard = bot_createKeyboard($user_id,'days_of_week_schedule',$testing);
+							bot_sendMessage($user_id,'Успешно! Выберите день недели:',$testing);
+
+						}else{
+							bot_handleError($user_id,'mysql','bot_convAddGrade_3',$testing);
+						}
+					}else{
+						$msg = 'Поменять класс нельзя, т.к. вы уже авторизованы';
+						bot_sendMessage($user_id, $msg, $testing);
+					}
+				}else{
+					$msg = 'Данного класса нет в базе данных - попробуйте еще раз или напишите "отменить"';
+					bot_sendMessage($user_id, $msg, $testing, 'none');
+				}
+			}else{
+				bot_handleError($user_id,'mysql','bot_convAddGrade_2',$testing);
+			}
+		}else{
+			$msg = 'Вас нет в базе данных - скорее всего, произошла какая-то ошибка. Попробуйте авторизоваться каким-либо способом или напишите "start"';
+			bot_sendMessage($user_id,$msg,$testing);
+		}
 	}else{
-		bot_handleError($user_id,'mysql','bot_convAddGrade',$testing);
+		bot_handleError($user_id,'mysql','bot_convAddGrade_1',$testing);
 	}
 }

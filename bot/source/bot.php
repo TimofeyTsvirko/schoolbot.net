@@ -9,9 +9,11 @@ function bot_handleMessage($data,$testing=false){
 	if ($testing) {
 		$message = mb_strtolower($data);
 		$user_id = 432657432;
+
 	}else{
 		$user_id = $data['from_id'];
 		$message = mb_strtolower($data['text']);
+		// -------------- do something with payload object in kbd
 	}
 	if(bot_checkAvailableConversation($user_id,$testing)){
 		switch ($message) {
@@ -62,10 +64,10 @@ function bot_handleHello($data,$testing=false){
 		}
 		if ($i==0){
 			$msg = 'Привет! Вижу, ты новенький здесь. Меня зовут Вася, я - чатбот, специально предназначенный для того, чтобы помогать различным школам.';
-			bot_sendMessage($user_id,$msg,$testing);
+			bot_sendMessage($user_id,$msg,$testing,'none');
 
 			$msg = 'На данный момент я могу давать расписание и делать объявления как отдельно для классов, так и для всей школы, но вскоре, может быть, смогу делать и другие полезные вещи...';
-			bot_sendMessage($user_id,$msg,$testing);
+			bot_sendMessage($user_id,$msg,$testing,'none');
 
 			$keyboard = bot_createKeyboard($user_id, 'accept_data_processing',$testing);
 			$msg = 'Перед тем, как вы будете пользоваться моими функциями, дайте согласие на обработку ваших данных (я обрабатываю только то, что вы пишите сюда):';
@@ -90,7 +92,7 @@ function bot_handleSchedule($data,$testing = false){
 	$result = @mysqli_query($dbc, $query);
 	if($result){
 		if($result->num_rows == 0){
-			$msg = 'Вас нет в базе данных - скорее всего, произошла какая-то ошибка. Попробуйте авторизоваться каким-либо способом';
+			$msg = 'Вас нет в базе данных - скорее всего, произошла какая-то ошибка. Попробуйте авторизоваться каким-либо способом или напишите "start"';
 			bot_sendMessage($user_id,$msg,$testing);
 		}else{
 			$row = mysqli_fetch_assoc($result);
