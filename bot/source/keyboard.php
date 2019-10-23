@@ -23,6 +23,9 @@ function bot_createKeyboard($user_id, $type, $testing){
 			case 'mailing':
 				$keyboard = bot_createAcceptKbd();
 				break;
+			case 'cancel':
+				$keyboard = bot_createCancelKbd();
+				break;
 			default:
 				bot_handleError($user_id, 'kbd_type', 'bot_createKeyboard',$testing);
 				break;
@@ -33,7 +36,7 @@ function bot_createKeyboard($user_id, $type, $testing){
 	}
 }
 
-function bot_createMenuKeyboard($user_role, $testing){
+function bot_createKbdSample(){	
 	// keyboard object
 	$keyboard = array();
 	$keyboard['one_time'] = true;
@@ -41,7 +44,13 @@ function bot_createMenuKeyboard($user_role, $testing){
 	$keyboard['buttons'] = array();
 	// first row
 	$keyboard['buttons'][] = array();
-	
+
+	return $keyboard;
+}
+
+function bot_createMenuKeyboard($user_role, $testing){
+	// keyboard object
+	$keyboard = bot_createKbdSample();
 	// schedule button
 	$schedule = array('color' => 'primary', 
 					'action' => array('type' => 'text', 'label' => 'Расписание'));
@@ -71,13 +80,7 @@ function bot_createMenuKeyboard($user_role, $testing){
 }
 
 function bot_createAcceptKbd(){
-	// keyboard object
-	$keyboard = array();
-	$keyboard['one_time'] = true;
-	// buttons object (array of arrays)
-	$keyboard['buttons'] = array();
-	// first row
-	$keyboard['buttons'][] = array();
+	$keyboard = bot_createKbdSample();
 
 	$accept = array('color' => 'positive',
 					'action' => array('type'=>'text', 'label'=>'Согласен(-на)'));
@@ -85,5 +88,15 @@ function bot_createAcceptKbd(){
 					'action' => array('type'=>'text', 'label'=>'Не согласен(-на)'));
 	$keyboard['buttons'][0][] = $accept;
 	$keyboard['buttons'][0][] = $decline;
+	return json_encode($keyboard, JSON_UNESCAPED_UNICODE);
+}
+
+function bot_createCancelKbd(){
+	$keyboard = bot_createKbdSample();
+
+	$cancel = array('color' => 'negative',
+					'action' => array('type'=>'text', 'label'=>'Отменить'));
+	$keyboard['buttons'][0][] = $cancel;
+
 	return json_encode($keyboard, JSON_UNESCAPED_UNICODE);
 }

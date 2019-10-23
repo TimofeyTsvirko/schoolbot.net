@@ -90,7 +90,16 @@ function bot_handleSchedule($data,$testing = false){
 	$result = @mysqli_query($dbc, $query);
 	if($result){
 		if($result->num_rows == 0){
-			// ------HERE------
+			$msg = 'Вас нет в базе данных - скорее всего, произошла какая-то ошибка. Попробуйте авторизоваться каким-либо способом';
+			bot_sendMessage($user_id,$msg,$testing);
+		}else{
+			$row = mysqli_fetch_assoc($result);
+			if (!$row['grade']){
+				$msg = 'Укажите свой класс (Пример: "10а","6в"):';
+
+				bot_sendMessage($user_id,$msg,$testing,'none');
+				bot_createConversation($user_id, 'add_grade', $testing);
+			}
 		}
 	}
 }
@@ -100,18 +109,19 @@ function bot_handleSchedule($data,$testing = false){
 // 
 
 function bot_sendMessage($user_id,$msg,$testing=false,$keyboard=false){
+	if (!$keyboard) {
+		$keyboard = bot_createKeyboard($user_id,'menu',$testing);
+	}else if ($keyboard == 'none'){
+		$kbd = array('one_time' => true, 'buttons' => array());
+    	$keyboard = json_encode($kbd,JSON_UNESCAPED_UNICODE);
+	}
 	if($testing){
 		echo $msg;
-		if($keyboard){
-			echo $keyboard;
-		}
+		echo $keyboard;
+
 		echo '<br>';
 		echo '<br>';
 	}else{
-		if (!$keyboard){
-    		$kbd = array('one_time' => true, 'buttons' => array());
-    		$keyboard = json_encode($kbd,JSON_UNESCAPED_UNICODE);
-  		}
 		vkApi_messagesSend($user_id, $msg, $keyboard);
 	}
 }

@@ -83,6 +83,9 @@ function bot_handleMessageConversation($user_id,$msg,$testing=false){
 			case 'accept_mailing':
 				bot_convMailing($user_id,$msg,$testing);
 				break;
+			case 'add_grade':
+				bot_convAddGrade($user_id,$msg,$testing);
+				break;
 			default:
 				# code...
 				break;
@@ -150,5 +153,16 @@ function bot_convMailing($user_id,$msg,$testing=false){
 			$keyboard = bot_createKeyboard($user_id, 'mailing', $testing);
 			bot_sendMessage($user_id, $msg, $testing,$keyboard);
 			break;
+	}
+}
+
+function bot_convAddGrade($user_id,$msg,$testing=false){
+	global $dbc;
+	$query = "SELECT * FROM users where id=$user_id";
+	$result = @mysqli_query($dbc,$query);
+	if($result){
+		// ---------here----------
+	}else{
+		bot_handleError($user_id,'mysql','bot_convAddGrade',$testing);
 	}
 }
